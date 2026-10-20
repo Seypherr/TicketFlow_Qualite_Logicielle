@@ -1,0 +1,5 @@
+Job: e2e (essais répétés)
+Run 1: PASS closes first ticket
+Run 2: FAIL closes first ticket — expected CLOSED, found OPEN after cy.wait(100)
+Run 3: PASS closes first ticket
+Context: application delays the close action by a random 0–900 ms.

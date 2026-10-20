@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TicketFlow</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Support interne</p>
+      <h1>TicketFlow</h1>
+    </div>
+    <button id="reset-btn" class="secondary" data-cy="reset">Réinitialiser</button>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Nouveau ticket</h2>
+      <form id="ticket-form" novalidate>
+        <label for="title">Titre
+          <input id="title" data-cy="ticket-title" name="title" autocomplete="off">
+        </label>
+        <label for="severity">Sévérité
+          <select id="severity" data-cy="ticket-severity" name="severity">
+            <option value="3">Faible</option>
+            <option value="6">Moyenne</option>
+            <option value="8">Élevée</option>
+            <option value="10">Critique</option>
+          </select>
+        </label>
+        <button type="submit" data-cy="create-ticket">Créer le ticket</button>
+        <p id="form-message" class="message" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="board-panel" class="panel">
+      <div class="list-header">
+        <div>
+          <p class="eyebrow">Tableau de bord</p>
+          <h2>Tickets</h2>
+        </div>
+        <input id="search" data-cy="search" aria-label="Rechercher un ticket" placeholder="Rechercher...">
+        <label for="sort-mode">Trier
+          <select id="sort-mode" data-cy="sort-mode">
+            <option value="creation">Ordre de création</option>
+            <option value="title">Titre A–Z</option>
+          </select>
+        </label>
+      </div>
+      <div id="stats" class="stats" data-cy="stats"></div>
+      <p id="list-message" class="message" aria-live="polite"></p>
+      <div id="ticket-list" class="tickets" data-cy="ticket-list"></div>
+    </section>
+
+    <section id="detail-panel" class="panel detail-panel" hidden>
+      <button id="back-btn" class="secondary" data-cy="back-to-list">← Retour aux tickets</button>
+      <div id="ticket-detail"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

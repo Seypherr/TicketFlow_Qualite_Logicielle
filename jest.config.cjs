@@ -1,0 +1,1 @@
+module.exports = { testEnvironment: 'jsdom', testMatch: ['<rootDir>/tests/**/*.test.js'], collectCoverageFrom: ['src/**/*.js', '!src/app.js'] };

@@ -1,0 +1,5 @@
+Job: e2e (incident simulé avec backend strict)
+FAIL createTicket: expected HTTP 201, received HTTP 400
+POST /api/tickets payload: { "name": "Panne serveur", "priority": "HIGH" }
+Response: { "message": "title is required" }
+Assertion: expected to find 'Ticket créé.' within 4000 ms

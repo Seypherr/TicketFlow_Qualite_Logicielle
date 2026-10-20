@@ -1,0 +1,29 @@
+{
+  "name": "ticketflow-testing-course",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projet fil rouge - Qualite Logicielle & Testing Avance - Bachelor 3",
+  "scripts": {
+    "dev": "http-server . -p 3000 -c-1",
+    "test": "jest",
+    "test:unit": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "build": "node scripts/build-check.js",
+    "cypress:open": "cypress open",
+    "e2e": "cypress run",
+    "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\" \"cypress/**/*.js\" \"scripts/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"tests/**/*.js\" \"cypress/**/*.js\" \"scripts/**/*.js\""
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "babel-jest": "^30.0.5",
+    "cypress": "^14.5.4",
+    "http-server": "^14.1.1",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "prettier": "3.9.8",
+    "wait-on": "^8.0.4"
+  }
+}
