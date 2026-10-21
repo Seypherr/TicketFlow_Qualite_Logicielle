@@ -1,0 +1,248 @@
+
+> ticketflow-testing-course@1.0.0 test
+> jest --runInBand --no-colors
+
+FAIL tests/ticket-service.test.js
+  ● Validation lors de la création d'un ticket › refuse un titre blanc sans sauvegarde ni appel API
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: {"createdAt": "2026-10-21T08:25:00.478Z", "id": "ec63a57e-e951-4f8d-8530-f7080e47e9f3", "name": "", "priority": "LOW", "severity": 3, "status": "OPEN", "title": ""}
+
+      42 |     expect(api.postTicket).not.toHaveBeenCalled();
+      43 |     expect(api.notifySupport).not.toHaveBeenCalled();
+    > 44 |   });
+         |      ^
+      45 |
+      46 |   test("crée toujours un ticket valide avec un titre normalisé", async () => {
+      47 |     // Arrange
+
+      at expect (node_modules/expect/build/index.js:2116:15)
+      at Object.<anonymous> (tests/ticket-service.test.js:44:11)
+
+FAIL tests/search-stats.test.js
+  ● Recherche de tickets › retrouve VPN inaccessible avec "vpn", sans tenir compte de la casse ni des espaces extérieurs
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 1
+
+    - Array [
+    -   Object {
+    -     "title": "VPN inaccessible",
+    -   },
+    - ]
+    + Array []
+
+      30 |     },
+      31 |   );
+    > 32 |
+         | ^
+      33 |   test("renvoie une liste vide si aucun titre ne correspond", () => {
+      34 |     // Arrange
+      35 |     const tickets = [{ title: "VPN inaccessible" }];
+
+      at tests/search-stats.test.js:32:21
+
+  ● Recherche de tickets › retrouve VPN inaccessible avec "  vPn  ", sans tenir compte de la casse ni des espaces extérieurs
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 1
+
+    - Array [
+    -   Object {
+    -     "title": "VPN inaccessible",
+    -   },
+    - ]
+    + Array []
+
+      30 |     },
+      31 |   );
+    > 32 |
+         | ^
+      33 |   test("renvoie une liste vide si aucun titre ne correspond", () => {
+      34 |     // Arrange
+      35 |     const tickets = [{ title: "VPN inaccessible" }];
+
+      at tests/search-stats.test.js:32:21
+
+  ● Statistiques des tickets › compte séparément OPEN et CLOSED sans classer PENDING comme fermé
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "closed": 1,
+    +   "closed": 2,
+        "open": 1,
+        "total": 3,
+      }
+
+      60 |
+      61 |   test("inclut un statut inconnu dans le total, sans le compter ouvert ou fermé", () => {
+    > 62 |     // Arrange
+         |               ^
+      63 |     const tickets = [{ status: "UNKNOWN" }];
+      64 |
+      65 |     // Act
+
+      at Object.<anonymous> (tests/search-stats.test.js:62:19)
+
+  ● Statistiques des tickets › inclut un statut inconnu dans le total, sans le compter ouvert ou fermé
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "closed": 0,
+    +   "closed": 1,
+        "open": 0,
+        "total": 1,
+      }
+
+      76 |     // Act
+      77 |     const stats = calculateStats(tickets);
+    > 78 |
+         | ^
+      79 |     // Assert
+      80 |     expect(stats).toEqual({ total: 0, open: 0, closed: 0 });
+      81 |   });
+
+      at Object.<anonymous> (tests/search-stats.test.js:78:19)
+
+FAIL tests/sort.test.js
+  ● Tri des tickets par titre › ne modifie pas le tableau de départ lors du tri A–Z
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+      Array [
+        Object {
+    -     "title": "zèbre",
+    -   },
+    -   Object {
+          "title": "Alpha",
+        },
+        Object {
+          "title": "école",
+    +   },
+    +   Object {
+    +     "title": "zèbre",
+        },
+      ]
+
+      26 |
+      27 |     // Assert
+    > 28 |     expect(tickets).toEqual(originalOrder);
+         |                     ^
+      29 |     expect(sorted).not.toBe(tickets);
+      30 |   });
+      31 |
+
+      at Object.<anonymous> (tests/sort.test.js:28:21)
+
+  ● Tri des tickets par titre › conserve l'ordre de création avec le mode undefined, même après un affichage A–Z
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+    -   "zèbre",
+        "Alpha",
+        "école",
+    +   "zèbre",
+      ]
+
+      40 |       const result = sortTicketsByTitle(tickets, mode);
+      41 |
+    > 42 |       // Assert
+         |                ^
+      43 |       expect(result.map((ticket) => ticket.title)).toEqual([
+      44 |         "zèbre",
+      45 |         "Alpha",
+
+      at tests/sort.test.js:42:48
+
+  ● Tri des tickets par titre › conserve l'ordre de création avec le mode "creation", même après un affichage A–Z
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+    -   "zèbre",
+        "Alpha",
+        "école",
+    +   "zèbre",
+      ]
+
+      40 |       const result = sortTicketsByTitle(tickets, mode);
+      41 |
+    > 42 |       // Assert
+         |                ^
+      43 |       expect(result.map((ticket) => ticket.title)).toEqual([
+      44 |         "zèbre",
+      45 |         "Alpha",
+
+      at tests/sort.test.js:42:48
+
+  ● Tri des tickets par titre › ignore la casse et conserve l'ordre relatif des titres équivalents
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+    -   "ALPHA",
+        "alpha",
+    +   "ALPHA",
+        "Beta",
+      ]
+
+      52 |     // Arrange
+      53 |     const tickets = ["Beta", "ALPHA", "alpha"].map((title) => ({ title }));
+    > 54 |
+         | ^
+      55 |     // Act
+      56 |     const sorted = sortTicketsByTitle(tickets, "title");
+      57 |
+
+      at Object.<anonymous> (tests/sort.test.js:54:48)
+
+FAIL tests/priority.test.js
+  ● Priorité des tickets › classe la sévérité 8 en HIGH
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "HIGH"
+    Received: "MEDIUM"
+
+      13 |     const ticket = { severity };
+      14 |
+    > 15 |     // Act : exécuter la fonction testée.
+         |                      ^
+      16 |     const priority = calculatePriority(ticket);
+      17 |
+      18 |     // Assert : comparer au résultat attendu.
+
+      at tests/priority.test.js:15:22
+
+Test Suites: 4 failed, 2 passed, 6 total
+Tests:       10 failed, 20 passed, 30 total
+Snapshots:   0 total
+Time:        1.838 s
+Ran all test suites.
