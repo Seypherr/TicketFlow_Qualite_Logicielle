@@ -1,50 +1,46 @@
-# TP1 — Compte rendu
+# TP 1 — Tests unitaires
 
-## Résultat vérifié
+## 1. Priorité, recherche et statistiques
 
-25 cas ajoutés aux 5 tests livrés : **30 tests réussis dans 6 suites**.
+On lance d'abord les tests déjà présents avec la commande suivante :
 
-| Étape | Résultat | Preuve d'exécution |
-| --- | --- | --- |
-| Suite livrée, code initial | 5 réussis | [Tests initiaux](resultats-tp1/01-tests-initiaux.txt) |
-| Nouveaux tests, avant correction | 10 échecs, 20 réussis | [Phase rouge](resultats-tp1/02-tests-rouges.txt) |
-| Mêmes tests, après correction | 30 réussis | [Phase verte](resultats-tp1/03-tests-verts.txt) |
+```bash
+npm test -- --runInBand
+```
 
-Pour relancer : `npm test -- --runInBand`.
+Les 5 tests passent, mais le test « sévérité critique => HIGH » vérifie seulement la valeur 10. Il ne permet donc pas de repérer le problème sur la sévérité 8.
 
-Le contrôle `npm run build` réussit. Le formatage des 7 fichiers JavaScript créés ou modifiés est vérifié. Le contrôle global `npm run format:check` signale encore 8 fichiers préexistants, inchangés dans ce TP : `src/app.js`, `src/ticket-api.js`, `src/ticket-repository.js`, `tests/ticket-utils.test.js`, `cypress/e2e/06-flaky.starter.cy.js`, `cypress/e2e/smoke.cy.js`, `cypress/support/e2e.js` et `scripts/build-check.js`.
+On ajoute des tests sur les valeurs 0, 3, 4, 7, 8 et 10. Pour la valeur 8, on obtient `MEDIUM` alors que le résultat attendu est `HIGH`. On remplace donc `severity > 8` par `severity >= 8`.
 
-## Défauts et corrections
+Pour la recherche, on teste une recherche vide, des espaces et plusieurs écritures de « vpn ». La recherche `vpn` ne retrouve pas « VPN inaccessible » car la comparaison tient compte des majuscules. On passe le titre et la recherche en minuscules, en retirant les espaces au début et à la fin de la recherche.
 
-| Comportement | Défaut observé par les tests | Correction |
-| --- | --- | --- |
-| Priorité | La sévérité 8 donne `MEDIUM` | `severity >= 8` donne `HIGH` |
-| Recherche | `vpn` et `  vPn  ` ne retrouvent pas `VPN inaccessible` | Retirer les espaces extérieurs de la requête et comparer en minuscules |
-| Statistiques | `PENDING` et `UNKNOWN` sont comptés comme fermés | Compter explicitement les statuts `CLOSED` |
-| Création | Un titre composé d'espaces est accepté | Rejeter le titre vide après normalisation, avant toute sauvegarde ou appel API |
-| Tri | Le tri modifie le tableau initial et distingue la casse | Trier une copie avec la locale française et `sensitivity: "base"` |
+Pour les statistiques, on utilise une liste avec les statuts `OPEN`, `CLOSED` et `PENDING`. On attend 3 tickets au total, 1 ouvert et 1 fermé. Avant correction, on obtient 2 tickets fermés car tous les tickets qui ne sont pas ouverts sont comptés comme fermés. On compte maintenant uniquement les statuts `CLOSED`. On vérifie aussi le cas d'un statut inconnu et d'une liste vide.
 
-La normalisation de `null`, des titres blancs et des espaces internes fonctionnait déjà : les nouveaux tests la protègent. L'API réservée au TP4 n'a pas été modifiée.
+## 2. Normalisation et création d'un ticket
 
-## Quel test passe « à tort » ?
+On teste la normalisation avec `null`, un titre composé d'espaces et un titre contenant plusieurs espaces entre les mots. La fonction renvoie déjà les bons résultats, on n'a donc pas besoin de la modifier.
 
-Pour l'incident principal, **« sévérité critique => HIGH »** passe parce qu'il teste seulement **10**, jamais **8**. Son assertion est correcte, mais sa couverture laisse échapper le défaut de seuil. De même, **« stats total »** vérifie uniquement le total, sans vérifier le nombre de tickets fermés.
+On essaie ensuite de créer un ticket avec le titre `'   '` et une sévérité de 3. Le ticket est accepté alors que son titre devient vide après normalisation.
 
-## Cas ajoutés
+On ajoute une vérification juste après la normalisation pour refuser un titre vide. On utilise `jest.fn()` pour remplacer le repository et l'API dans le test. On vérifie que la création est rejetée et que `save` et `postTicket` ne sont jamais appelés. On teste aussi qu'un ticket valide peut toujours être créé avec un titre normalisé.
 
-- `priority.test.js` : 6 cas, aux valeurs 0, 3, 4, 7, 8 et 10.
-- `search-stats.test.js` : 9 cas, recherches vide/blanche, casse, espaces, absence de résultat et statistiques avec statuts mixtes/inconnu ou liste vide.
-- `normalization.test.js` : 3 cas, `null`, titre blanc et espaces internes.
-- `ticket-service.test.js` : 2 cas ajoutés, rejet sans effet de bord et création valide avec titre normalisé.
-- `sort.test.js` : 5 cas, ordre français, absence de mutation, retour à la création avec mode explicite/par défaut et insensibilité à la casse.
+## 3. Tri des tickets
 
-## À retenir
+On utilise les titres « zèbre », « Alpha » et « école ». Le résultat attendu est « Alpha », « école », « zèbre ».
 
-- **Arrange / Act / Assert** : préparer les données, appeler la fonction, vérifier le résultat.
-- **Valeurs limites** : tester les frontières des règles métier ; 7 et 8 distinguent `MEDIUM` de `HIGH`.
-- **Oracle** : résultat attendu défini par la règle métier, par exemple `8 → HIGH`, sans recopier l'algorithme testé.
-- **Mocks injectés** : `jest.fn()` remplace le repository et l'API ; on vérifie que `save` et `postTicket` ont zéro appel après le rejet attendu avec `await expect(...).rejects`.
-- **Rouge → vert** : un test échoue sur le défaut, puis réussit après correction. Des tests verts ne prouvent pas l'absence de bugs.
-- **Immutabilité** : `sort()` modifie le tableau ; `[...tickets].sort(...)` préserve son ordre initial.
+Le tri modifie directement le tableau de départ. Quand on revient au mode `creation`, l'ordre d'origine est donc perdu. On trie une copie du tableau avec `[...tickets]` et on précise la langue française avec `localeCompare`. L'option `sensitivity: "base"` permet d'ignorer les différences de casse.
 
-**Le tri justifie-t-il un E2E à lui seul ?** Non : ces règles sont couvertes rapidement et précisément par les tests unitaires. Un E2E devient utile pour vérifier le parcours complet dans l'interface, par exemple le sélecteur A–Z puis le retour à l'ordre de création.
+On vérifie l'ordre français, la conservation du tableau initial, le retour à l'ordre de création et le tri de titres avec des casses différentes.
+
+Un test E2E n'est pas nécessaire pour le tri seul, car on peut vérifier son résultat avec un test unitaire. Il serait utile pour tester le changement de mode depuis l'interface.
+
+## 4. Résultat
+
+On a ajouté 25 cas aux 5 tests de départ, soit 30 tests dans 6 suites.
+
+- Avant correction : 10 tests échouent et 20 passent.
+- Après correction : les 30 tests passent.
+
+Les résultats d'exécution sont disponibles ici : [tests de départ](resultats-tp1/01-tests-initiaux.txt), [avant correction](resultats-tp1/02-tests-rouges.txt) et [après correction](resultats-tp1/03-tests-verts.txt).
+
+Les tests suivent les étapes Arrange / Act / Assert : on prépare les données, on appelle la fonction, puis on compare le résultat avec celui attendu. Ce TP montre surtout qu'il faut tester les valeurs limites : les tests de départ passaient alors que plusieurs erreurs étaient encore présentes.
