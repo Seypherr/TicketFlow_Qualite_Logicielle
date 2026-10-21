@@ -1,0 +1,19 @@
+
+> ticketflow-testing-course@1.0.0 test:coverage
+> jest --coverage --runInBand --no-colors
+
+----------------------|---------|----------|---------|---------|-------------------
+File                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------------|---------|----------|---------|---------|-------------------
+All files             |   50.56 |    48.07 |   35.48 |   47.94 |
+ ticket-api.js        |   11.11 |        0 |       0 |    12.5 | 12-34,39-48
+ ticket-repository.js |    12.5 |        0 |       0 |   13.33 | 3-10,14-28
+ ticket-service.js    |    62.5 |    36.36 |      20 |   69.23 | 6-11,39
+ ticket-utils.js      |     100 |       84 |     100 |     100 | 28-29,38,48
+----------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 7 passed, 7 total
+Tests:       36 passed, 36 total
+Snapshots:   0 total
+Time:        2.272 s
+Ran all test suites.

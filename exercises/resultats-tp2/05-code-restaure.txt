@@ -1,0 +1,10 @@
+
+> ticketflow-testing-course@1.0.0 test
+> jest --runInBand --no-colors
+
+
+Test Suites: 7 passed, 7 total
+Tests:       36 passed, 36 total
+Snapshots:   0 total
+Time:        1.807 s
+Ran all test suites.

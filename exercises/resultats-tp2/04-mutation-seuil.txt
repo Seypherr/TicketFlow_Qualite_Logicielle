@@ -1,0 +1,27 @@
+
+> ticketflow-testing-course@1.0.0 test
+> jest --runInBand tests/shipping.test.js --no-colors
+
+FAIL tests/shipping.test.js
+  ● Frais de livraison › facture 100 € de commande à 0 € de frais
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 9.9
+
+      14 |     const cost = shippingCost(order);
+      15 |
+    > 16 |     // Assert
+         |              ^
+      17 |     expect(cost).toBe(expectedCost);
+      18 |   });
+      19 |
+
+      at tests/shipping.test.js:16:18
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 5 passed, 6 total
+Snapshots:   0 total
+Time:        1.631 s
+Ran all test suites matching tests/shipping.test.js.

@@ -1,0 +1,54 @@
+
+> ticketflow-testing-course@1.0.0 test:coverage
+> jest --coverage --runInBand --no-colors
+
+FAIL tests/shipping.test.js
+  ● Frais de livraison › facture 100 € de commande à 0 € de frais
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 9.9
+
+      14 |     const cost = shippingCost(order);
+      15 |
+    > 16 |     // Assert
+         |              ^
+      17 |     expect(cost).toBe(expectedCost);
+      18 |   });
+      19 |
+
+      at tests/shipping.test.js:16:18
+
+  ● Frais de livraison › offre la livraison à un membre premium même pour 20 €
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 9.9
+
+      27 |     // Assert
+      28 |     expect(cost).toBe(0);
+    > 29 |   });
+         |      ^
+      30 |
+      31 |   test("traite une commande absente comme un total de 0 € non premium", () => {
+      32 |     // Arrange : hypothèse annoncée dans le compte rendu.
+
+      at Object.<anonymous> (tests/shipping.test.js:29:18)
+
+----------------------|---------|----------|---------|---------|-------------------
+File                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------------|---------|----------|---------|---------|-------------------
+All files             |   50.56 |    48.07 |   35.48 |   47.94 |
+ ticket-api.js        |   11.11 |        0 |       0 |    12.5 | 12-34,39-48
+ ticket-repository.js |    12.5 |        0 |       0 |   13.33 | 3-10,14-28
+ ticket-service.js    |    62.5 |    36.36 |      20 |   69.23 | 6-11,39
+ ticket-utils.js      |     100 |       84 |     100 |     100 | 28-29,38,48
+----------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 1 failed, 6 passed, 7 total
+Tests:       2 failed, 34 passed, 36 total
+Snapshots:   0 total
+Time:        20.674 s
+Ran all test suites.
